@@ -1,0 +1,17 @@
+{
+  
+  "scripts": {
+    "build": "waffle",
+    "test": "NODE_ENV=test mocha"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.6.0",
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "10.0.1",
+    "chai": "^4.3.7",
+    "ethereum-waffle": "^4.0.10",
+    "mocha": "^10.2.0",
+    "ts-node": "10.9.1",
+    "typescript": "5.0.2"
+  }
+}
