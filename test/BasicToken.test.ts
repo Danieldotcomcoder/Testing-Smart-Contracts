@@ -1,7 +1,7 @@
 import {expect, use} from 'chai';
 import {Contract} from 'ethers';
 import {deployContract, MockProvider, solidity} from 'ethereum-waffle';
-import UserAccount from '../build/UserAccount.json';
+import BankAccount from '../build/SimpleBank.json';
 
 use(solidity);
 
@@ -10,22 +10,49 @@ describe('UserAccount', () => {
   let token: Contract;
 
   beforeEach(async () => {
-    token = await deployContract(wallet, UserAccount);
+    token = await deployContract(wallet, BankAccount);
   });
   
-  it('Get initial balance', async () => {
-    expect(await token.balances(wallet.address)).to.equal(0);
+  it('create account', async () => {
+    expect(await token.createAccount());
   });
 
-  it('Deposit amount into the wallet', async () => {
-    await token.deposit({value: 100});
-    expect(await token.balances(wallet.address)).to.equal(100);
+  it('get balance', async () => {
+    expect(await token.createAccount());
+    expect(await token.getBalance()).to.equal(0);
   });
 
-  it('Deposit then withdraw some from the wallet', async () => {
+
+  it('deposit and then getbalance', async () => {
+    expect(await token.createAccount());
+    expect(await token.deposit({value: 50}))
+    expect(await token.getBalance()).to.equal(50);
+  });
+
+
+  it('deposit and withdraw then getbalance', async () => {
+    expect(await token.createAccount());
+    expect(await token.deposit({value: 50}))
+    expect(await token.withdraw(20))
+    expect(await token.getBalance()).to.equal(30);
+  });
+
+  it('Deposit then make a transaction then check balance', async () => {
+    expect(await token.createAccount());
     await token.deposit({value: 150});
-    await token.withdraw(50);
-    expect(await token.balances(wallet.address)).to.equal(100);
+    expect(await token.makeTransaction(50, {serviceName: 'Translating pdf'}, {serviceType: 'Translating'}));
+    expect(await token.getBalance()).to.equal(100);
+  });
+
+  it('make multiple transaction then get transactions', async () => {
+    expect(await token.createAccount());
+    await token.deposit({value: 150});
+    expect(await token.makeTransaction(50, 'Translating pdf', 'Translating'));
+    expect(await token.makeTransaction(10, 'Translating pdf', 'Translating'));
+    expect(await token.makeTransaction(10, 'Translating pdf', 'Translating'));
+    expect(await token.makeTransaction(10,  'Translating pdf','Translating'));
+    expect(await token.getBalance()).to.equal(70);
+    expect(await token.getTransactions())
   });
 
   // it('Transfer emits event', async () => {
