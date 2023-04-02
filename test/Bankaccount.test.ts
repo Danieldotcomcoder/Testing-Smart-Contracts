@@ -6,7 +6,7 @@ import BankAccount from '../build/SimpleBank.json';
 use(solidity);
 
 describe('Bank Account', () => {
-  const [wallet, walletTo] = new MockProvider().getWallets();
+  const [wallet] = new MockProvider().getWallets();
   let token: Contract;
 
   beforeEach(async () => {

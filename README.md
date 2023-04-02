@@ -1,3 +1,3 @@
 # Testing-Smart-Contracts
 
-An enviroment I created for testing smart contracts
+A waffle enivroment for testing smart contracts
